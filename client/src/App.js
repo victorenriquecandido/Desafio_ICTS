@@ -1,14 +1,21 @@
 import './App.css';
-import {useState} from "react";
+import { useState } from "react";
+import Axios from "axios";
 
 function App() {
 
-  const [name, setName] = useState("react");
+  const [nome, setNome] = useState("react");
   const [descricao, setDescricao] = useState("react");
   const [preco, setPreco] = useState(0);
 
-  const displayInfo = () =>{
-    console.log(name, descricao, preco);
+  const addProduto = () => {
+    Axios.post("http://localhost:3001/create", {
+      nome: nome,
+      descricao: descricao,
+      preco: preco,
+    }).then(() => {
+      console.log("sucesso");
+    });
   };
 
   return (
@@ -16,7 +23,7 @@ function App() {
       <div className="information">
     <label>Nome:</label>
     <input type="text" onChange={(event) => {
-      setName(event.target.value);
+      setNome(event.target.value);
     }} ></input>
       <label>Descrição:</label>
       <input type="text" onChange={(event) => {
@@ -26,7 +33,7 @@ function App() {
       <input type="text" onChange={(event) => {
       setPreco(event.target.value);
     }} ></input>
-      <button onClick={displayInfo}>Adicionar produto</button>
+      <button onClick={addProduto}>Adicionar produto</button>
     </div>
     </div>
   );
