@@ -1,9 +1,9 @@
-import './App.css'
+import React from 'react'
+import './Produtos.css'
 import { useState } from 'react'
 import Axios from 'axios'
-import Modal from './Component/Modal/Modal'
 
-function App() {
+function PagesProdutos() {
   const [nome, setNome] = useState('')
   const [descricao, setDescricao] = useState('')
   const [preco, setPreco] = useState(0)
@@ -11,15 +11,9 @@ function App() {
   const [produtoLista, setProdutoLista] = useState([])
   const [produtoDetalhes, setProdutoDetalhes] = useState([])
 
-  const [newCompra, setNewCompra] = useState(0)
-  const [qtdproduto, setQtdProduto] = useState('')
-  const [total, setTotal] = useState(0)
-  const [tipopagamento, setTipoPagamento] = useState('')
-  const [compraLista, setCompraLista] = useState([])
-
   /*   const displayInfo = () => {
-    console.log(qtdproduto, total, tipopagamento)
-  } */
+      console.log(qtdproduto, total, tipopagamento)
+    } */
 
   const addProduto = () => {
     Axios.post('http://localhost:3001/create', {
@@ -90,88 +84,6 @@ function App() {
     })
   }
 
-  //////////////////////////////////////////////////////////////////////////
-
-  const addCompra = () => {
-    Axios.post('http://localhost:3001/compra/create', {
-      qtdproduto: setQtdProduto,
-      total: setTotal,
-      tipopagamento: setTipoPagamento,
-    }).then(() => {
-      setCompraLista([
-        ...compraLista,
-        {
-          qtdproduto: setQtdProduto,
-          total: setTotal,
-          tipopagamento: setTipoPagamento,
-        },
-      ])
-    })
-  }
-
-  const getCompras = () => {
-    Axios.get('http://localhost:3001/compra').then((response) => {
-      setCompraLista(response.data)
-    })
-  }
-
-  const updateCompra = (id) => {
-    Axios.put('http://localhost:3001/compra/update', {
-      preco: newPreco,
-      id: id,
-    }).then((response) => {
-      setProdutoLista(
-        produtoLista.map((val) => {
-          return val.id == id
-            ? {
-                id: val.id,
-                nome: val.nome,
-                descricao: val.descricao,
-                preco: newPreco,
-              }
-            : val
-        }),
-      )
-    })
-  }
-
-  const deleteCompra = (id) => {
-    Axios.delete(`http://localhost:3001/compra/delete/${id}`).then(
-      (response) => {
-        setCompraLista(
-          compraLista.filter((val) => {
-            return val.id != id
-          }),
-        )
-      },
-    )
-  }
-
-  function ProductTable(props) {
-    const { products } = props
-    return (
-      <table>
-        <caption>Our products</caption>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>In Stock</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product.id}>
-              <td>{product.name}</td>
-              <td>{product.price}</td>
-              <td>{product.stock}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    )
-  }
-
   return (
     <fieldset>
       <div className="jumbotron">
@@ -203,7 +115,7 @@ function App() {
                 setPreco(event.target.value)
               }}
             />
-            <button onClick={addProduto}>Adicionar Produtos</button>
+            //<button onClick={addProduto}>Adicionar Produtos</button>
           </div>
 
           <div className="produtos-botao">
@@ -263,83 +175,8 @@ function App() {
           </div>
         </div>
       </div>
-
-      <div className="jumbotron">
-        <div className="App">
-          <h1>Desafio ICTS</h1>
-          <h2>Compras</h2>
-          <div className="information">
-            <label>Quantidade do produto:</label>
-            <input
-              type="text"
-              placeholder="Exemplo: 1"
-              onChange={(event) => {
-                setQtdProduto(event.target.value)
-              }}
-            />
-            <label>Total:</label>
-            <input
-              type="number"
-              placeholder="Exemplo: 5.000"
-              onChange={(event) => {
-                setTotal(event.target.value)
-              }}
-            />
-            <label>Tipo de pagamento:</label>
-            <input
-              type="text"
-              placeholder="Exemplo: Dinheiro"
-              onChange={(event) => {
-                setTipoPagamento(event.target.value)
-              }}
-            />
-            <button onClick={addCompra}>Adicionar Compra</button>
-          </div>
-          <div className="compras-botao">
-            <button onClick={getCompras}>Mostrar Compras</button>
-
-            {compraLista.map((val, key) => {
-              return (
-                <div className="compras">
-                  <div>
-                    <h3>Quantidade do produto: {val.qtdproduto}</h3>
-                    <h3>Total: {val.total}</h3>
-                    <h3>Tipo de pagamento: {val.tipopagamento}</h3>
-                  </div>
-                  <div>
-                    <input
-                      className="1"
-                      type="text"
-                      placeholder="Digite o novo preço do produto..."
-                      onChange={(event) => {
-                        setNewCompra(event.target.value)
-                      }}
-                    />
-                    <button
-                      onClick={() => {
-                        updateCompra(val.id)
-                      }}
-                    >
-                      {' '}
-                      Atualizar Preço
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        deleteCompra(val.id)
-                      }}
-                    >
-                      Deletar Produto
-                    </button>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </div>
     </fieldset>
   )
 }
 
-export default App
+export default PagesProdutos
